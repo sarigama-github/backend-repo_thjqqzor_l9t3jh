@@ -11,8 +11,8 @@ Model name is converted to lowercase for the collection name:
 - BlogPost -> "blogs" collection
 """
 
-from pydantic import BaseModel, Field
-from typing import Optional
+from pydantic import BaseModel, Field, EmailStr
+from typing import Optional, List
 
 # Example schemas (replace with your own):
 
@@ -37,6 +37,27 @@ class Product(BaseModel):
     price: float = Field(..., ge=0, description="Price in dollars")
     category: str = Field(..., description="Product category")
     in_stock: bool = Field(True, description="Whether product is in stock")
+
+# Service lead/contact inquiry
+class Lead(BaseModel):
+    name: str = Field(..., description="Customer full name")
+    email: EmailStr = Field(..., description="Customer email")
+    phone: str = Field(..., description="Customer phone number")
+    service_needed: str = Field(..., description="Requested service type")
+    address: Optional[str] = Field(None, description="Service address")
+    message: Optional[str] = Field(None, description="Additional details or message")
+    source: Optional[str] = Field("website", description="Lead source identifier")
+
+# Online estimate request (allows photos)
+class Estimate(BaseModel):
+    name: str = Field(..., description="Customer full name")
+    email: EmailStr = Field(..., description="Customer email")
+    phone: str = Field(..., description="Customer phone number")
+    service_needed: str = Field(..., description="Requested service type")
+    address: Optional[str] = Field(None, description="Service address")
+    message: Optional[str] = Field(None, description="Extra details")
+    photo_filenames: List[str] = Field(default_factory=list, description="Uploaded photo filenames")
+    source: Optional[str] = Field("website", description="Request source")
 
 # Add your own schemas here:
 # --------------------------------------------------
